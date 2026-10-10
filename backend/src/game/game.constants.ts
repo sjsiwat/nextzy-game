@@ -6,3 +6,7 @@ export const CHECKPOINTS = [
   { points: 7500, reward: 'รางวัล B' },
   { points: 10000, reward: 'รางวัล C' },
 ];
+
+export const CHECKPOINT_POINTS = CHECKPOINTS.map(
+  (checkpoint) => checkpoint.points,
+);

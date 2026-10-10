@@ -1,8 +1,13 @@
-import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { MAX_SCORE } from './game.constants';
 import { capScore, getSummary, pickRandomScore } from './game.logic';
-import { PlayerSummary, PlayResult } from './game.types';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
+import { Prisma } from '../generated/prisma/client';
+import { CHECKPOINTS, MAX_SCORE } from './game.constants';
+import { ClaimResult, PlayerSummary, PlayResult } from './game.types';
 
 @Injectable()
 export class GameService {
@@ -48,5 +53,41 @@ export class GameService {
       maxScore: MAX_SCORE,
       checkpoints: getSummary(totalScore, claimedPoints),
     };
+  }
+
+  async claimReward(
+    playerId: string,
+    checkpoint: number,
+  ): Promise<ClaimResult> {
+    const reward = CHECKPOINTS.find((item) => item.points === checkpoint);
+    if (!reward) {
+      throw new BadRequestException('Unknown checkpoint');
+    }
+
+    const player = await this.prisma.player.findUnique({
+      where: { id: playerId },
+    });
+    if (!player || player.totalScore < checkpoint) {
+      throw new BadRequestException('Score has not reached this checkpoint');
+    }
+
+    try {
+      const claim = await this.prisma.rewardClaim.create({
+        data: { playerId, checkpoint, rewardName: reward.reward },
+      });
+      return {
+        checkpoint,
+        reward: claim.rewardName,
+        claimedAt: claim.createdAt,
+      };
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException('Reward already claimed');
+      }
+      throw error;
+    }
   }
 }

@@ -16,3 +16,9 @@ export interface PlayerSummary {
   maxScore: number;
   checkpoints: CheckpointSummary[];
 }
+
+export interface ClaimResult {
+  checkpoint: number;
+  reward: string;
+  claimedAt: Date;
+}
