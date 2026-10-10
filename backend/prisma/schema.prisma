@@ -1,0 +1,38 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Player {
+  id         String        @id @default(uuid())
+  totalScore Int           @default(0)
+  createdAt  DateTime      @default(now())
+  plays      PlayHistory[]
+  claims     RewardClaim[]
+}
+
+model PlayHistory {
+  id        Int      @id @default(autoincrement())
+  playerId  String
+  player    Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  score     Int
+  createdAt DateTime @default(now())
+
+  @@index([playerId, createdAt])
+}
+
+model RewardClaim {
+  id         Int      @id @default(autoincrement())
+  playerId   String
+  player     Player   @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  checkpoint Int
+  rewardName String
+  createdAt  DateTime @default(now())
+
+  @@unique([playerId, checkpoint])
+}
