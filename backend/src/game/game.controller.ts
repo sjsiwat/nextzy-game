@@ -1,4 +1,11 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from '@nestjs/common';
 import { PlayerParamsDto } from '../common/dto/player-params.dto';
 import { GameService } from './game.service';
 import { ClaimParamsDto } from './dto/claim-params.dto';
@@ -20,5 +27,11 @@ export class GameController {
   @Post('rewards/:checkpoint/claim')
   claimReward(@Param() params: ClaimParamsDto) {
     return this.gameService.claimReward(params.playerId, params.checkpoint);
+  }
+
+  @Post('reset')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  resetPlayer(@Param() params: PlayerParamsDto) {
+    return this.gameService.resetPlayer(params.playerId);
   }
 }

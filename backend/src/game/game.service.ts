@@ -90,4 +90,7 @@ export class GameService {
       throw error;
     }
   }
+  async resetPlayer(playerId: string): Promise<void> {
+    await this.prisma.player.deleteMany({ where: { id: playerId } });
+  }
 }
