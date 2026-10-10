@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { capScore, pickRandomScore } from './game.logic';
-import { PlayResult } from './game.types';
+import { MAX_SCORE } from './game.constants';
+import { capScore, getSummary, pickRandomScore } from './game.logic';
+import { PlayerSummary, PlayResult } from './game.types';
 
 @Injectable()
 export class GameService {
@@ -31,5 +32,21 @@ export class GameService {
       await tx.playHistory.create({ data: { playerId, score } });
       return { score, totalScore };
     });
+  }
+
+  async getPlayerSummary(playerId: string): Promise<PlayerSummary> {
+    const player = await this.prisma.player.findUnique({
+      where: { id: playerId },
+      include: { claims: true },
+    });
+
+    const totalScore = player?.totalScore ?? 0;
+    const claimedPoints = player?.claims.map((claim) => claim.checkpoint) ?? [];
+
+    return {
+      totalScore,
+      maxScore: MAX_SCORE,
+      checkpoints: getSummary(totalScore, claimedPoints),
+    };
   }
 }

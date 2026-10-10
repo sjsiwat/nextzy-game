@@ -10,3 +10,9 @@ export interface PlayResult {
   score: number;
   totalScore: number;
 }
+
+export interface PlayerSummary {
+  totalScore: number;
+  maxScore: number;
+  checkpoints: CheckpointSummary[];
+}
