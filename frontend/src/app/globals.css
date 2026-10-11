@@ -1,26 +1,41 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-kanit), ui-sans-serif, system-ui, sans-serif;
+
+  /* ค่าจาก Figma */
+  --color-brand-orange: #ff8d0b;
+  --color-brand-yellow: #ffc124;
+  --color-brand-maroon: #b63335; /* ป้าย "แชร์คะแนน" */
+  --color-brand-red-claim: #ff0004; /* ปุ่มกดรับรางวัล */
+  --color-brand-red: #ff2428; /* ปุ่มสุ่มคะแนน / ตัวเลขคะแนนสะสม */
+  --color-brand-green-dark: #09862e; /* ตัวเลขคะแนน */
+  --color-brand-cyan: #1ae3d6; /* พื้นหลังตัวเลขคะแนน */
+  --color-brand-green: #0ef76f; /* พื้นหลังคะแนนที่ได้ (game finish) */
+  --color-brand-blue: #1e00ff; /* ปุ่ม RESET */
+  --color-ink: #212b36; /* ตัวอักษรหลัก */
+  --color-surface-gray: #dddddd;
+  --color-ink-strong: #333333;
+  --color-muted: #999999;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@utility bg-progress-fill {
+  background-image: linear-gradient(90deg, #ff8158 0%, #ff8902 159.71%);
+}
+
+@utility bg-progress-ball {
+  background-image: linear-gradient(180deg, #ff0004 0%, #fc8625 100%);
+}
+
+@utility bg-avatar-play {
+  background-image: linear-gradient(180deg, #a03c3c 0%, #ff1f24 100%);
+}
+
+@utility bg-avatar-reward {
+  background-image: linear-gradient(180deg, #15145f 0%, #5a1cfa 100%);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: #fff;
+  color: var(--color-ink);
 }
