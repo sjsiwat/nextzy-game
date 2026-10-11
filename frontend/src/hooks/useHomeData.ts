@@ -47,9 +47,25 @@ export function useHomeData() {
     }
   }, [load]);
 
+  // คืนชื่อรางวัลเมื่อสำเร็จ ไม่สำเร็จคืน null
+  const claim = useCallback(
+    async (points: number): Promise<string | null> => {
+      try {
+        const result = await api.claim(getPlayerId(), points);
+        await load();
+        return result.reward;
+      } catch (err) {
+        await load(); // ซิงก์หน้าจอกับข้อมูลจริงก่อน แล้วค่อยแสดง error
+        setError(toMessage(err));
+        return null;
+      }
+    },
+    [load],
+  );
+
   useEffect(() => {
     void load();
   }, [load]);
 
-  return { data, error, reload: load, reset };
+  return { data, error, reload: load, reset, claim };
 }

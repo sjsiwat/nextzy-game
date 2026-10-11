@@ -5,6 +5,7 @@ import BottomBar from "@/components/BottomBar";
 import HistoryList from "@/components/HistoryList";
 import HistoryTabs, { type HistoryTab } from "@/components/HistoryTabs";
 import ProgressCard from "@/components/ProgressCard";
+import ResultModal from "@/components/ResultModal";
 import { useHomeData } from "@/hooks/useHomeData";
 
 function HomeSkeleton() {
@@ -21,8 +22,18 @@ function HomeSkeleton() {
 }
 
 export default function HomePage() {
-  const { data, error, reload, reset } = useHomeData();
+  const { data, error, reload, reset, claim } = useHomeData();
   const [tab, setTab] = useState<HistoryTab>("plays");
+  const [claiming, setClaiming] = useState(false);
+  const [claimedReward, setClaimedReward] = useState<string | null>(null);
+
+  const handleClaim = async (points: number) => {
+    if (claiming) return;
+    setClaiming(true);
+    const reward = await claim(points);
+    setClaiming(false);
+    if (reward) setClaimedReward(reward);
+  };
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-125 flex-col bg-white">
@@ -45,10 +56,7 @@ export default function HomePage() {
 
         {data && (
           <>
-            <ProgressCard
-              summary={data.summary}
-              onClaim={(points) => console.log("claim", points)}
-            />
+            <ProgressCard summary={data.summary} onClaim={handleClaim} />
             <button
               type="button"
               onClick={() => void reset()}
@@ -65,6 +73,14 @@ export default function HomePage() {
       </div>
 
       <BottomBar href="/game" label="ไปเล่นเกม" />
+
+      <ResultModal
+        open={claimedReward !== null}
+        title="ยินดีด้วย"
+        message={`คุณได้รับ${claimedReward ?? ""}`}
+        imageSrc="/images/coin.png"
+        onClose={() => setClaimedReward(null)}
+      />
     </main>
   );
 }
