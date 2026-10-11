@@ -19,19 +19,22 @@ function toMessage(err: unknown): string {
     : "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง";
 }
 
+async function fetchHomeData(playerId: string): Promise<HomeData> {
+  const [summary, plays, rewards] = await Promise.all([
+    api.getSummary(playerId),
+    api.getPlayHistory(playerId),
+    api.getRewardHistory(playerId),
+  ]);
+  return { summary, plays, rewards };
+}
+
 export function useHomeData() {
   const [data, setData] = useState<HomeData | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const playerId = getPlayerId();
     try {
-      const [summary, plays, rewards] = await Promise.all([
-        api.getSummary(playerId),
-        api.getPlayHistory(playerId),
-        api.getRewardHistory(playerId),
-      ]);
-      setData({ summary, plays, rewards });
+      setData(await fetchHomeData(getPlayerId()));
       setError(null);
     } catch (err) {
       setError(toMessage(err));
@@ -63,9 +66,22 @@ export function useHomeData() {
     [load],
   );
 
+  // โหลดครั้งแรก: ignore กัน setState หลังออกจากหน้าไปก่อนข้อมูลมาถึง
   useEffect(() => {
-    void load();
-  }, [load]);
+    let ignore = false;
+    fetchHomeData(getPlayerId())
+      .then((result) => {
+        if (ignore) return;
+        setData(result);
+        setError(null);
+      })
+      .catch((err: unknown) => {
+        if (!ignore) setError(toMessage(err));
+      });
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   return { data, error, reload: load, reset, claim };
 }
