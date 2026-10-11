@@ -10,12 +10,12 @@ import { useHomeData } from "@/hooks/useHomeData";
 
 function HomeSkeleton() {
   return (
-    <div aria-busy="true" className="animate-pulse">
-      <div className="h-56.75 bg-neutral-200" />
-      <div className="mx-auto mt-5.5 h-6.75 w-21.25 rounded-full bg-neutral-200" />
-      <div className="mt-7 flex gap-1.75 px-2.5">
-        <div className="h-8 w-22.5 rounded-full bg-neutral-200" />
-        <div className="h-8 w-22.5 rounded-full bg-neutral-200" />
+    <div aria-busy="true">
+      <ProgressCard summary={null} onClaim={() => {}} />
+      <div className="mx-auto mt-5.5 h-6.75 w-21.25 animate-pulse rounded-full bg-neutral-200" />
+      <div className="mt-7.25 flex gap-1.5 px-2.5">
+        <div className="h-8 w-22.5 animate-pulse rounded-full bg-neutral-200" />
+        <div className="h-8 w-22.5 animate-pulse rounded-full bg-neutral-200" />
       </div>
     </div>
   );

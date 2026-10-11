@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { formatNumber } from "@/lib/format";
+import { DEFAULT_MAX_SCORE } from "@/lib/game";
 import type { Checkpoint, PlayerSummary } from "@/lib/types";
 
 interface ProgressCardProps {
-  summary: PlayerSummary;
+  summary: PlayerSummary | null;
   onClaim: (points: number) => void;
 }
 
@@ -74,7 +75,12 @@ function ClaimPill({
 }
 
 export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
-  const { totalScore, maxScore, checkpoints } = summary;
+  // summary เป็น null ระหว่างรอข้อมูลจาก backend: วาดโครงและข้อความตายตัวก่อน
+  const loading = summary === null;
+  const totalScore = summary?.totalScore ?? 0;
+  const maxScore = summary?.maxScore ?? DEFAULT_MAX_SCORE;
+  const checkpoints = summary?.checkpoints ?? [];
+
   const percent = Math.min(totalScore / maxScore, 1) * 100;
   const fillEnd = `min(${percent}%, calc(100% - ${COIN_OFFSET_PX}px))`;
   const lastIndex = checkpoints.length - 1;
@@ -96,9 +102,13 @@ export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
           <p className="text-sm font-medium leading-6">
             คะแนนครบ {formatNumber(maxScore)} รับรางวัลใหญ่
           </p>
-          <p className="text-2xl font-bold leading-7 text-brand-red">
-            {formatNumber(totalScore)}/{formatNumber(maxScore)}
-          </p>
+          {loading ? (
+            <div className="ml-auto h-7 w-36 animate-pulse rounded bg-neutral-200" />
+          ) : (
+            <p className="text-2xl font-bold leading-7 text-brand-red">
+              {formatNumber(totalScore)}/{formatNumber(maxScore)}
+            </p>
+          )}
         </div>
 
         <div className="ml-4 mr-8 mt-10">
@@ -107,10 +117,12 @@ export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
               className="h-full rounded-full bg-progress-fill"
               style={{ width: fillEnd }}
             />
-            <span
-              className="absolute top-1/2 size-4.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-progress-ball"
-              style={{ left: fillEnd }}
-            />
+            {!loading && (
+              <span
+                className="absolute top-1/2 size-4.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-progress-ball"
+                style={{ left: fillEnd }}
+              />
+            )}
 
             {checkpoints.map((checkpoint, index) => (
               <div
@@ -134,7 +146,7 @@ export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
           </div>
         </div>
 
-        <div className="mt-5 flex justify-end gap-2.5 pr-2">
+        <div className="mt-5 flex h-5 justify-end gap-2.5 pr-2">
           {checkpoints.map((checkpoint) => (
             <ClaimPill
               key={checkpoint.points}

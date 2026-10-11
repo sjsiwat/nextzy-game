@@ -1,6 +1,8 @@
 // ค่าที่ใช้แสดงผลเท่านั้น ผู้ตัดสินคะแนนจริงคือ backend
 export const GAME_SCORES = [300, 500, 1000, 3000];
 export const REVEAL_DELAY_MS = 700;
+// ใช้แสดงผลก่อนข้อมูลจาก backend มาถึง (ค่าจริงมาจาก summary.maxScore)
+export const DEFAULT_MAX_SCORE = 10000;
 
 export function shuffle<T>(items: readonly T[]): T[] {
   const result = [...items];
