@@ -18,7 +18,15 @@ export class ApiError extends Error {
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, init);
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, init);
+  } catch {
+    throw new ApiError(
+      0,
+      "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองใหม่",
+    );
+  }
 
   if (!response.ok) {
     const body = await response.json().catch(() => null);

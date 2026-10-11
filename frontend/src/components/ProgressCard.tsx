@@ -76,6 +76,7 @@ function ClaimPill({
 export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
   const { totalScore, maxScore, checkpoints } = summary;
   const percent = Math.min(totalScore / maxScore, 1) * 100;
+  const fillEnd = `min(${percent}%, calc(100% - ${COIN_OFFSET_PX}px))`;
   const lastIndex = checkpoints.length - 1;
 
   const positionOf = (points: number, isLast: boolean) =>
@@ -84,7 +85,7 @@ export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
       : `${(points / maxScore) * 100}%`;
 
   return (
-    <section className="bg-surface-gray px-4.25 pb-3 pt-3.75">
+    <section className="bg-surface-gray pb-3 pl-4.25 pr-3.75 pt-3.75">
       <div className="relative rounded-2xl border border-black bg-white pb-3.5 pt-4.5">
         <span className="absolute left-0 top-3.5 flex h-5.5 items-center rounded-r-full bg-brand-maroon px-3 text-xs font-medium leading-none text-white">
           แชร์คะแนน
@@ -104,11 +105,11 @@ export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
           <div className="relative h-2.5 rounded-full bg-slate-200">
             <div
               className="h-full rounded-full bg-progress-fill"
-              style={{ width: `${percent}%` }}
+              style={{ width: fillEnd }}
             />
             <span
               className="absolute top-1/2 size-4.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-progress-ball"
-              style={{ left: `${percent}%` }}
+              style={{ left: fillEnd }}
             />
 
             {checkpoints.map((checkpoint, index) => (

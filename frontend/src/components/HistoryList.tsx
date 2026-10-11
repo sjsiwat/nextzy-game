@@ -36,7 +36,7 @@ export default function HistoryList({ tab, plays, rewards }: HistoryListProps) {
       {rows.map((row) => (
         <li
           key={row.id}
-          className="flex h-20.5 items-center gap-6 border-b border-neutral-200 px-6"
+          className="flex h-20.5 items-center gap-5.5 border-b border-neutral-200 px-6"
         >
           <span className={`size-12 shrink-0 rounded-full ${avatarClass}`} />
           <div className="min-w-0">
