@@ -17,6 +17,8 @@
   --color-surface-gray: #dddddd;
   --color-ink-strong: #333333;
   --color-muted: #999999;
+  --color-tab-red: #ff383c;
+  --color-tab-gray: #979797;
 }
 
 @utility bg-progress-fill {

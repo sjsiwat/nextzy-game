@@ -12,7 +12,7 @@ interface HistoryTabsProps {
 
 export default function HistoryTabs({ active, onChange }: HistoryTabsProps) {
   return (
-    <div role="tablist" className="mt-7 flex gap-1.75 px-2.5">
+    <div role="tablist" className="mt-7.25 flex gap-1.5 px-2.5">
       {TABS.map((tab) => {
         const selected = tab.id === active;
         return (
@@ -22,10 +22,10 @@ export default function HistoryTabs({ active, onChange }: HistoryTabsProps) {
             role="tab"
             aria-selected={selected}
             onClick={() => onChange(tab.id)}
-            className={`flex h-8 w-22.5 items-center justify-center whitespace-nowrap rounded-full border text-base ${
+            className={`flex h-8 w-22.5 items-center justify-center whitespace-nowrap rounded-full border px-2 text-[13px] leading-[1.2] ${
               selected
-                ? "border-brand-red text-brand-red"
-                : "border-muted text-muted"
+                ? "border-tab-red text-tab-red"
+                : "border-tab-gray text-tab-gray"
             }`}
           >
             {tab.label}
