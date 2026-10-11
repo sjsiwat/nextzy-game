@@ -112,7 +112,7 @@ lib/
   types.ts                          ชนิดข้อมูลที่ตรงกับ response ของ backend
   player.ts                         สร้าง/อ่าน UUID ผู้เล่นจาก localStorage
   format.ts                         จัดรูปแบบตัวเลขและวันเวลา
-  game.ts                           ค่าคะแนนสำหรับแสดงผล, shuffle, sleep
+  game.ts                           ค่าสำหรับแสดงผล (`GAME_SCORES`, `REVEAL_DELAY_MS`, `DEFAULT_MAX_SCORE`), shuffle, sleep
 ```
 
 หน้าเป็น Client Component เพราะรหัสผู้เล่นอยู่ใน `localStorage` (ฝั่ง server อ่านไม่ได้) logic การดึงข้อมูลอยู่ใน hooks หน้าจึงมีแต่โครงสร้าง UI
