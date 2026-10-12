@@ -19,6 +19,7 @@
   --color-muted: #999999;
   --color-tab-red: #ff383c;
   --color-tab-gray: #979797;
+  --color-placeholder: #f0f0f0; /* placeholder "ชื่อ - นามสกุล" บนการ์ด */
 }
 
 @utility bg-progress-fill {

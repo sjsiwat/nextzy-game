@@ -93,6 +93,13 @@ export default function ProgressCard({ summary, onClaim }: ProgressCardProps) {
   return (
     <section className="bg-surface-gray pb-3 pl-4.25 pr-3.75 pt-3.75">
       <div className="relative rounded-2xl border border-black bg-white pb-3.5 pt-4.5">
+        {/* Figma: ห่างจากซ้าย 147px ของการ์ด 343px ใช้เปอร์เซ็นต์ให้สัดส่วนคงที่ที่ 300–500px */}
+        <span
+          aria-hidden="true"
+          className="absolute left-[42.86%] top-px whitespace-nowrap text-[10px] leading-4 text-placeholder"
+        >
+          ชื่อ - นามสกุล
+        </span>
         <span className="absolute left-0 top-3.5 flex h-5.5 items-center rounded-r-full bg-brand-maroon px-3 text-xs font-medium leading-none text-white">
           แชร์คะแนน
         </span>
